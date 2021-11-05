@@ -5,6 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 
+import 'collapse/cross.dart';
+import 'collapse/expansionTile.dart';
+import 'collapse/expansion_panel_list.dart';
+
 final worklist = "new Queue()";
 
 void main() {
@@ -61,7 +65,52 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Padding(padding: EdgeInsets.all(20),child: Text('async、await↓↓↓'),),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text('折叠效果 ↓↓↓'),
+              ),
+              ElevatedButton(
+                child: Text('ExpansionPanelList ExpansionPanel'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              MyStatefulWidget()));
+                },
+              ),
+              ElevatedButton(
+                child: Text('ExpansionTile'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => Expansiontile()));
+                },
+              ),
+              ElevatedButton(
+                child: Text('AnimatedCrossFade'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => TolyExpandTile()));
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text('Dio ↓↓↓'),
+              ),
+              ElevatedButton(
+                child: Text('dio'),
+                onPressed: () {
+                  addDioInterceptor();
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text('async、await↓↓↓'),
+              ),
               ElevatedButton(
                 child: Text('通过async、await实现异步请求网络'),
                 onPressed: () {
@@ -471,5 +520,40 @@ class _MyHomePageState extends State<MyHomePage> {
         return true;
       });
     });
+  }
+
+  void addDioInterceptor() {
+    var dio = Dio();
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // 拦截处理
+        return handler.next(options); //continue
+      },
+    ));
+  }
+}
+
+class AuthInterceptor extends Interceptor {
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    // TODO: implement onRequest
+    handler.resolve(Response(
+        requestOptions: options, data: 'fake data')); //自定义处理 终止请求，返回Response
+
+    super.onRequest(options, handler);
+  }
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    // TODO: implement onResponse
+    handler.reject(
+        DioError(requestOptions: response.requestOptions)); //自定义处理 返回错误DioError
+    super.onResponse(response, handler);
+  }
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) {
+    // TODO: implement onError
+    super.onError(err, handler);
   }
 }
