@@ -17,27 +17,30 @@ class _TolyExpandTileState extends State<TolyExpandTile>
     return Scaffold(
       appBar: AppBar(
         title: Text('AnimatedCrossFade'),
-      ),body:  Container(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(),
-              ),
-              GestureDetector(
-                  onTap: _togglePanel,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.code),
-                  ))
-            ],
-          ),
-          _buildPanel()
-        ],
       ),
-    ),
+      body: Container(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Text('展开、折叠'),
+                  ),
+                ),
+                GestureDetector(
+                    onTap: _togglePanel,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.code),
+                    ))
+              ],
+            ),
+            _buildPanel()
+          ],
+        ),
+      ),
     );
   }
 

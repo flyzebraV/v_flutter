@@ -8,6 +8,7 @@ import 'package:oktoast/oktoast.dart';
 import 'collapse/cross.dart';
 import 'collapse/expansionTile.dart';
 import 'collapse/expansion_panel_list.dart';
+import 'future/future_builder.dart';
 
 final worklist = "new Queue()";
 
@@ -65,6 +66,21 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              _buildItemSplit(),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text('异步UI ↓↓↓'),
+              ),
+              ElevatedButton(
+                child: Text('FutureBuilder'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              FutureBuilderApp()));
+                },
+              ),
               Padding(
                 padding: EdgeInsets.all(20),
                 child: Text('折叠效果 ↓↓↓'),
@@ -530,6 +546,75 @@ class _MyHomePageState extends State<MyHomePage> {
         return handler.next(options); //continue
       },
     ));
+  }
+
+  Widget _buildItemSplit1() {
+    return IntrinsicHeight(
+      child: Row(children: [
+        Expanded(
+          child: Container(
+              color: Colors.orange,
+              child: Column(
+                children: [
+                  Text('A'),
+                  Text('A'),
+                  Text('A'),
+                ],
+              )),
+        ),
+        Container(
+            alignment: Alignment.center,
+            color: Colors.blueGrey,
+            child: Text('BBB')),
+      ]),
+    );
+  }
+
+  Widget _buildItemSplit() {
+    return IntrinsicHeight(
+      child: Row(children: [
+        Expanded(
+          child: Container(
+              color: Colors.orange,
+              child: Column(
+                children: [
+                  Text('A'),
+                  Text('A'),
+                  Text('A'),
+                ],
+              )),
+        ),
+        FractionallySizedBox(
+          heightFactor: 1,
+          child: Container(
+              alignment: Alignment.center,
+              color: Colors.blueGrey,
+              child: Text('BBB')),
+        ),
+      ]),
+    );
+  }
+
+  Widget _buildItemSplit2() {
+    return Row(
+      children: <Widget>[
+        Container(
+          color: Colors.blue,
+          height: 50,
+          width: 100,
+        ),
+        Flexible(
+            child: Container(
+          color: Colors.red,
+          height: 150,
+        )),
+        Container(
+          color: Colors.blue,
+          height: 50,
+          width: 100,
+        ),
+      ],
+    );
   }
 }
 
